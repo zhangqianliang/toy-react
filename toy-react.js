@@ -8,6 +8,10 @@ class ElementWrapper {
     }
 
     appendChild(component) {
+        /* 
+         * 这里append componet的root，如果是Class Componet，root为空，
+         * 会递归直到找到ElementWrapper的root
+         */
         this.root.appendChild(component.root);
     }
 }
@@ -35,6 +39,7 @@ export class Component {
 
     get root() {
         if (!this._root) {
+            // render递归，找到ElementWrapper的root
             this._root = this.render().root;
         }
         return this._root;
@@ -52,6 +57,7 @@ export function createElement(type, attributes, ...children) {
     for (let p in attributes) {
         e.setAttribute(p, attributes[p]);
     }
+
     let insertChildren = (children) => {
         for (let child of children) {
             if (typeof child === 'string') {
